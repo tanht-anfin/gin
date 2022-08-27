@@ -1,0 +1,12 @@
+### `docs`
+- Using PlantUML extension in Visual studio
+- Visual diagram extension resource
+    - Homepage: https://marketplace.visualstudio.com/items?itemName=jebbs.plantuml
+    - Sequence diagram page: https://plantuml.com/sequence-diagram
+    - Entity Relationship Diagram: https://plantuml.com/ie-diagram
+- Installing and using PlantUML
+    ```
+        brew install --cask temurin
+        brew install graphviz
+    ```
+    In Mac, click to the file and press option + D

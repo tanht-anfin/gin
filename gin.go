@@ -20,7 +20,7 @@ import (
 	"golang.org/x/net/http2/h2c"
 )
 
-const defaultMultipartMemory = 32 << 20 // 32 MB
+const defaultMultipartMemory = 32 << 20 // 32 << 20 = 32 * 1 << 20 AND 32 MB, 1 MB = 2^10 KB, 1 KB = 2^10 bytes
 
 var (
 	default404Body = []byte("404 page not found")
@@ -85,6 +85,7 @@ type Engine struct {
 	// For example if /foo/ is requested but a route only exists for /foo, the
 	// client is redirected to /foo with http status code 301 for GET requests
 	// and 307 for all other request methods.
+	// status code 301: Moved Permanently is used for permanent redirecting
 	RedirectTrailingSlash bool
 
 	// RedirectFixedPath if enabled, the router tries to fix the current request path, if no
