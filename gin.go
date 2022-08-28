@@ -185,23 +185,33 @@ func New() *Engine {
 			basePath: "/",
 			root:     true,
 		},
-		FuncMap:                template.FuncMap{},
-		RedirectTrailingSlash:  true,
-		RedirectFixedPath:      false,
+		FuncMap: template.FuncMap{},
+
+		RedirectTrailingSlash: true,
+		RedirectFixedPath:     false,
+
 		HandleMethodNotAllowed: false,
-		ForwardedByClientIP:    true,
-		RemoteIPHeaders:        []string{"X-Forwarded-For", "X-Real-IP"},
-		TrustedPlatform:        defaultPlatform,
-		UseRawPath:             false,
-		RemoveExtraSlash:       false,
-		UnescapePathValues:     true,
-		MaxMultipartMemory:     defaultMultipartMemory,
-		trees:                  make(methodTrees, 0, 9),
-		delims:                 render.Delims{Left: "{{", Right: "}}"},
-		secureJSONPrefix:       "while(1);",
-		trustedProxies:         []string{"0.0.0.0/0", "::/0"},
-		trustedCIDRs:           defaultTrustedCIDRs,
+
+		ForwardedByClientIP: true,
+
+		RemoteIPHeaders: []string{"X-Forwarded-For", "X-Real-IP"},
+		TrustedPlatform: defaultPlatform,
+
+		UseRawPath:       false,
+		RemoveExtraSlash: false,
+
+		UnescapePathValues: true,
+
+		MaxMultipartMemory: defaultMultipartMemory,
+
+		trees:            make(methodTrees, 0, 9),
+		delims:           render.Delims{Left: "{{", Right: "}}"},
+		secureJSONPrefix: "while(1);", // use to prevent JSON Hijacking, prefix renders the string syntactically invalid as a script so that it cannot be hijacked.
+		trustedProxies:   []string{"0.0.0.0/0", "::/0"},
+
+		trustedCIDRs: defaultTrustedCIDRs,
 	}
+
 	engine.RouterGroup.engine = engine
 	engine.pool.New = func() any {
 		return engine.allocateContext()

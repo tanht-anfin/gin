@@ -102,7 +102,7 @@ func TestDebugPrintWARNINGDefault(t *testing.T) {
 		debugPrintWARNINGDefault()
 		SetMode(TestMode)
 	})
-	m, e := getMinVer(runtime.Version())
+	m, e := getGoVer(runtime.Version())
 	if e == nil && m < ginSupportMinGoVer {
 		assert.Equal(t, "[GIN-debug] [WARNING] Now Gin requires Go 1.15+.\n\n[GIN-debug] [WARNING] Creating an Engine instance with the Logger and Recovery middleware already attached.\n\n", re)
 	} else {
@@ -151,16 +151,22 @@ func captureOutput(t *testing.T, f func()) string {
 }
 
 func TestGetMinVer(t *testing.T) {
-	var m uint64
-	var e error
-	_, e = getMinVer("go1")
+	var (
+		m uint64
+		e error
+	)
+
+	_, e = getGoVer("go1")
 	assert.NotNil(t, e)
-	m, e = getMinVer("go1.1")
+
+	m, e = getGoVer("go1.1")
 	assert.Equal(t, uint64(1), m)
 	assert.Nil(t, e)
-	m, e = getMinVer("go1.1.1")
+
+	m, e = getGoVer("go1.1.1")
 	assert.Nil(t, e)
 	assert.Equal(t, uint64(1), m)
-	_, e = getMinVer("go1.1.1.1")
+
+	_, e = getGoVer("go1.1.1.1")
 	assert.NotNil(t, e)
 }

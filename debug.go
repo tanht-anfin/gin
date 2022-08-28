@@ -52,28 +52,28 @@ func debugPrint(format string, values ...any) {
 		if !strings.HasSuffix(format, "\n") {
 			format += "\n"
 		}
+
+		// Frpintf users a format specifier such as DefaultWriter io.Writer = os.Stdout
 		fmt.Fprintf(DefaultWriter, "[GIN-debug] "+format, values...)
 	}
 }
 
-func getMinVer(v string) (uint64, error) {
-	first := strings.IndexByte(v, '.')
+func getGoVer(v string) (uint64, error) {
+	first := strings.IndexByte(v, '.') // get index of . in string v
 	last := strings.LastIndexByte(v, '.')
-	if first == last {
+	if first == last { // in case: 1.15
 		return strconv.ParseUint(v[first+1:], 10, 64)
 	}
-	return strconv.ParseUint(v[first+1:last], 10, 64)
+
+	return strconv.ParseUint(v[first+1:last], 10, 64) // in case of having a sub version: 1.15.3
 }
 
 func debugPrintWARNINGDefault() {
-	if v, e := getMinVer(runtime.Version()); e == nil && v < ginSupportMinGoVer {
-		debugPrint(`[WARNING] Now Gin requires Go 1.15+.
-
-`)
+	if v, e := getGoVer(runtime.Version()); e == nil && v < ginSupportMinGoVer {
+		debugPrint(`[WARNING] Now Gin requires Go 1.15+.`)
 	}
-	debugPrint(`[WARNING] Creating an Engine instance with the Logger and Recovery middleware already attached.
 
-`)
+	debugPrint(`[WARNING] Creating an Engine instance with the Logger and Recovery middleware already attached.`)
 }
 
 func debugPrintWARNINGNew() {
