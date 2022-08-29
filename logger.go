@@ -138,8 +138,18 @@ var defaultLogFormatter = func(param LogFormatterParams) string {
 	}
 
 	if param.Latency > time.Minute {
-		param.Latency = param.Latency.Truncate(time.Second)
+		param.Latency = param.Latency.Truncate(time.Second) // remove duration < sedcond
 	}
+
+	// Structs formatted with %v show field values in their default formats.
+	// The %+v form shows the fields by name, while %#v formats the struct in
+	// Go source format.
+	// person := struct {
+	// 	Name string
+	// 	Age  int
+	// }{"Kim", 22}
+	// fmt.Printf("%v %+v %#v\n", person, person, person)
+	// Result: {Kim 22} {Name:Kim Age:22} struct { Name string; Age int }{Name:"Kim", Age:22}
 	return fmt.Sprintf("[GIN] %v |%s %3d %s| %13v | %15s |%s %-7s %s %#v\n%s",
 		param.TimeStamp.Format("2006/01/02 - 15:04:05"),
 		statusColor, param.StatusCode, resetColor,
