@@ -414,10 +414,12 @@ func (engine *Engine) prepareTrustedCIDRs() ([]*net.IPNet, error) {
 				trustedProxy += "/128"
 			}
 		}
+
 		_, cidrNet, err := net.ParseCIDR(trustedProxy)
 		if err != nil {
 			return cidr, err
 		}
+
 		cidr = append(cidr, cidrNet)
 	}
 	return cidr, nil
@@ -466,6 +468,7 @@ func (engine *Engine) validateHeader(header string) (clientIP string, valid bool
 	if header == "" {
 		return "", false
 	}
+
 	items := strings.Split(header, ",")
 	for i := len(items) - 1; i >= 0; i-- {
 		ipStr := strings.TrimSpace(items[i])
@@ -474,6 +477,7 @@ func (engine *Engine) validateHeader(header string) (clientIP string, valid bool
 			break
 		}
 
+		// The X-Forwarded-For (XFF) request header is a de-facto standard header for identifying the originating IP address of a client connecting to a web server through a proxy server
 		// X-Forwarded-For is appended by proxy
 		// Check IPs in reverse order and stop when find untrusted proxy
 		if (i == 0) || (!engine.isTrustedProxy(ip)) {

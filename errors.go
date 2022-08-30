@@ -101,15 +101,18 @@ func (a errorMsgs) ByType(typ ErrorType) errorMsgs {
 	if len(a) == 0 {
 		return nil
 	}
+
 	if typ == ErrorTypeAny {
 		return a
 	}
+
 	var result errorMsgs
 	for _, msg := range a {
 		if msg.IsType(typ) {
 			result = append(result, msg)
 		}
 	}
+
 	return result
 }
 
